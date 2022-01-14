@@ -23,4 +23,5 @@ echo '<?xml version="1.0" encoding="utf-8"?>
 ' > values/dimens.xml
 
 popd
-echo "PRODUCT_PACKAGE_OVERLAYS += vendor/lawnicons/overlay" > overlay.mk
+echo "PRODUCT_ENFORCE_RRO_EXCLUDED_OVERLAYS += vendor/lawnicons/overlay" > overlay.mk
+echo "PRODUCT_PACKAGE_OVERLAYS += vendor/lawnicons/overlay" >> overlay.mk
