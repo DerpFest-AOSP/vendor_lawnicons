@@ -93,7 +93,6 @@ object SvgFilesProcessor {
             val fileOutputStream = FileOutputStream(targetFile)
             Svg2Vector.parseSvgToXml(svgSource, fileOutputStream)
             val fg = "@color/primaryForeground"
-            val bg = "@color/primaryBackground"
             try {
                 updateXmlPath(targetFile, "android:strokeColor", fg)
                 updateXmlPath(targetFile, "android:fillColor", fg)
@@ -101,7 +100,6 @@ object SvgFilesProcessor {
             } catch (e: DocumentException) {
                 throw RuntimeException(e)
             }
-            createAdaptive(targetFile, bg)
         } else {
             println("Skipping file as its not svg " + svgSource.fileName)
         }
