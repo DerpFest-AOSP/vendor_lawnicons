@@ -18,16 +18,12 @@ object ConfigProcessor {
     private const val VERSION = "version"
 
     fun loadAndCreateConfigs(appFilterFile: String, vararg resDirs: String) {
-        val (appFilterDocument, drawableMap, iconMap) = loadConfigFromXml(appFilterFile)
+        val (_, drawableMap, iconMap) = loadConfigFromXml(appFilterFile)
         val sortedDrawableMap = drawableMap.toList().sortedBy { (_, value) -> value }.toMap()
 
         resDirs.forEach {
-            // Create Drawable files
-            writeDrawableToFile(sortedDrawableMap, "$it/xml/drawable.xml")
             // Create Icon Map files
             writeIconMapToFile(sortedDrawableMap, iconMap, "$it/xml/grayscale_icon_map.xml")
-            // Write AppFilter to resource directory
-            XmlUtil.writeDocumentToFile(appFilterDocument, "$it/xml/appfilter.xml")
         }
     }
 
