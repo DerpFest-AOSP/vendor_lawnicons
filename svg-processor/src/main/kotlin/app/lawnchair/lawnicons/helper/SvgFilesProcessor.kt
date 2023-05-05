@@ -9,6 +9,7 @@ import java.nio.file.FileVisitor
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.EnumSet
 import org.apache.commons.io.FileUtils
@@ -25,6 +26,10 @@ object SvgFilesProcessor {
         this.destinationVectorPath = Paths.get(destDirectory)
         try {
             val options = EnumSet.of(FileVisitOption.FOLLOW_LINKS)
+            if (Files.isDirectory(destinationVectorPath)) {
+                deleteRecursively(destinationVectorPath)
+            }
+
             // check first if source is a directory
             if (Files.isDirectory(sourceSvgPath)) {
                 Files.walkFileTree(sourceSvgPath, options, Int.MAX_VALUE, fileVisitor)
@@ -64,6 +69,21 @@ object SvgFilesProcessor {
 
         override fun visitFileFailed(file: Path, exc: IOException?): FileVisitResult =
             FileVisitResult.CONTINUE
+    }
+
+    private fun deleteRecursively(dir: Path) {
+        Files.walkFileTree(dir, object : SimpleFileVisitor<Path>() {
+            @Throws(IOException::class)
+            override fun postVisitDirectory(dir: Path?, exc: IOException?): FileVisitResult {
+                dir?.let { Files.delete(it) }
+                return FileVisitResult.CONTINUE
+            }
+            @Throws(IOException::class)
+            override fun visitFile(file: Path?, attrs: BasicFileAttributes?): FileVisitResult {
+                file?.let { Files.delete(it) }
+                return FileVisitResult.CONTINUE
+            }
+        })
     }
 
     private fun convertToVector(svgSource: Path, vectorTargetPath: Path) {
