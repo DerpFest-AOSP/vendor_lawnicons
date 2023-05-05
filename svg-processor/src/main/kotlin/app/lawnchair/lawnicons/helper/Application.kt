@@ -3,7 +3,7 @@ package app.lawnchair.lawnicons.helper
 fun main() {
     val rootDir = ".."
     val sourceDir = "$rootDir/svgs/"
-    val resDir = "$rootDir/app/src/runtime/res"
+    val resDir = "$rootDir/overlay/packages/apps/Launcher3/res"
     val appFilterFile = "$rootDir/app/assets/appfilter.xml"
 
     // Convert svg to drawable in runtime
