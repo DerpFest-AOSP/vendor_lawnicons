@@ -100,9 +100,17 @@ object SvgFilesProcessor {
             } catch (e: DocumentException) {
                 throw RuntimeException(e)
             }
+            adjustIconName(targetFile)
         } else {
             println("Skipping file as its not svg " + svgSource.fileName)
         }
+    }
+
+    private fun adjustIconName(xmlPath: String) {
+        val xml = xmlPath.replace("(.*)/(.*).xml".toRegex(),"$1/themed_icon_$2.xml")
+        val file = FileUtils.getFile(xml)
+        file.delete()
+        FileUtils.moveFile(FileUtils.getFile(xmlPath), file)
     }
 
     @Throws(IOException::class)
