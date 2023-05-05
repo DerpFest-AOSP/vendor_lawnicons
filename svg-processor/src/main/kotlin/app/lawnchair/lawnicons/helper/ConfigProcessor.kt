@@ -61,17 +61,19 @@ object ConfigProcessor {
         filename: String,
     ) {
         val iconsDocument = DefaultDocument().apply { addElement(ICONS) }
-        drawableMap.forEach { (componentInfo, drawable) ->
-            val component = componentInfo.split("/").toTypedArray()
-            val name = iconMap.getOrDefault(
-                componentInfo,
-                drawable.replace("_".toRegex(), " ").capitalize(),
-            )
-            iconsDocument.rootElement.addElement(ICON)
-                .addAttribute(DRAWABLE, "@drawable/${drawable}_foreground")
-                .addAttribute(PACKAGE, component[0])
-                .addAttribute(NAME, name)
-        }
+        drawableMap.entries
+            .distinctBy { it.key.split("/").first() }
+            .forEach { (componentInfo, drawable) ->
+                val component = componentInfo.split("/").toTypedArray()
+                val name = iconMap.getOrDefault(
+                    componentInfo,
+                    drawable.replace("_".toRegex(), " ").capitalize(),
+                )
+                iconsDocument.rootElement.addElement(ICON)
+                    .addAttribute(DRAWABLE, "@drawable/${drawable}_foreground")
+                    .addAttribute(PACKAGE, component[0])
+                    .addAttribute(NAME, name)
+            }
         XmlUtil.writeDocumentToFile(iconsDocument, filename)
     }
 
