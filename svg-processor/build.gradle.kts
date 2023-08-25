@@ -4,11 +4,11 @@ plugins {
 }
 
 application {
-    mainClass.set("app.lawnchair.lawnicons.helper.ApplicationKt")
+    mainClass = "app.lawnchair.lawnicons.helper.ApplicationKt"
 }
 
 dependencies {
-    implementation("com.android.tools:sdk-common:31.0.1")
+    implementation("com.android.tools:sdk-common:31.1.1")
     implementation("org.dom4j:dom4j:2.1.4")
-    implementation("commons-io:commons-io:2.11.0")
+    implementation("commons-io:commons-io:2.13.0")
 }

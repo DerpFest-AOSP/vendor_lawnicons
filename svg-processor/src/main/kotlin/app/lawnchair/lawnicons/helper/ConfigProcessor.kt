@@ -10,6 +10,7 @@ object ConfigProcessor {
     private const val COMPONENT = "component"
     private const val PACKAGE = "package"
     private const val DRAWABLE = "drawable"
+    private const val DRAWABLEIGNORE = "drawableIgnore"
     private const val ICONS = "icons"
     private const val ICON = "icon"
     private const val RESOURCES = "resources"
@@ -27,8 +28,7 @@ object ConfigProcessor {
         }
     }
 
-    private fun loadConfigFromXml(appFilterFile: String):
-        Triple<Document, Map<String, String>, Map<String, String>> {
+    private fun loadConfigFromXml(appFilterFile: String): Triple<Document, Map<String, String>, Map<String, String>> {
         val drawableMap = mutableMapOf<String, String>()
         val iconMap = mutableMapOf<String, String>()
         val componentStart = "ComponentInfo{"
@@ -39,6 +39,9 @@ object ConfigProcessor {
             val componentInfo = element.attribute(COMPONENT).value
             val drawable = element.attribute(DRAWABLE).value
             val name = element.attribute(NAME).value
+            val shouldIgnore: String? = element.attributeValue(DRAWABLEIGNORE)
+            if (shouldIgnore != null) continue
+
             if (componentInfo.startsWith(componentStart) && componentInfo.endsWith(componentEnd)) {
                 val component = componentInfo.substring(
                     componentStart.length,
@@ -78,7 +81,7 @@ object ConfigProcessor {
             addElement(RESOURCES)
             rootElement.addElement(VERSION).addText("1")
         }
-        var groupNames = mutableListOf<Char>()
+        val groupNames = mutableListOf<Char>()
         drawableMap.values.distinct().forEach { drawable: String ->
             val groupName = drawable[0].uppercaseChar()
             if (groupName !in groupNames) {
